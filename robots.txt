@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://tu-usuario.github.io/referral-hub/sitemap.xml
+
+# Evitar indexar el panel de admin
+Disallow: /admin.html

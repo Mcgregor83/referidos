@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enlaces de Referido</title>
+    <meta name="description" content="Los mejores enlaces de referido para ahorrar y ganar dinero">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --bg: #f8f9fa;
+            --text: #333333;
+            --text-secondary: #666666;
+            --border: #e9ecef;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+            border: 4px solid var(--border);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .bio {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            background: white;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Links */
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .link {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .link.featured {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.05));
+        }
+
+        .link:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: var(--primary);
+        }
+
+        .link-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .link-emoji {
+            font-size: 32px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .link-info {
+            flex: 1;
+        }
+
+        .link-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+
+        .link-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .link-category {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 8px;
+            color: white;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        /* Error state */
+        .error-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .error-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #dc3545;
+        }
+
+        .error-state p {
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .retry-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 30px 15px;
+            }
+
+            .filters {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+
+            .filter-btn {
+                white-space: nowrap;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .link {
+            animation: fadeIn 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="avatar" id="avatar"></div>
+            <h1 class="name" id="name">Cargando...</h1>
+            <p class="description" id="description"></p>
+            <p class="bio" id="bio" style="display: none;"></p>
+            <div class="social-links" id="socialLinks"></div>
+        </header>
+
+        <!-- Filters -->
+        <div class="filters" id="filters" style="display: none;">
+            <button class="filter-btn active" data-category="all">🌟 Todos</button>
+        </div>
+
+        <!-- Links Container -->
+        <div class="links" id="linksContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Cargando enlaces...</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🔗 Hub de Enlaces de Referido</p>
+        </footer>
+    </div>
+
+    <script>
+        // Variables globales
+        let config = null;
+        let currentFilter = 'all';
+
+        // Cargar configuración
+        async function loadConfig() {
+            try {
+                // Intentar cargar config.js
+                const response = await fetch('config.js');
+                if (!response.ok) {
+                    throw new Error('No se pudo cargar config.js');
+                }
+
+                const text = await response.text();
+
+                // Evaluar el código para obtener HUB_CONFIG y THEMES
+                eval(text);
+
+                // Verificar que se cargó correctamente
+                if (typeof HUB_CONFIG === 'undefined') {
+                    throw new Error('HUB_CONFIG no está definido');
+                }
+
+                config = HUB_CONFIG;
+
+                // Aplicar tema
+                applyTheme();
+
+                // Renderizar todo
+                renderProfile();
+                renderFilters();
+                renderLinks();
+
+            } catch (error) {
+                console.error('Error cargando configuración:', error);
+                showError();
+            }
+        }
+
+        // Mostrar error
+        function showError() {
+            document.getElementById('linksContainer').innerHTML = `
+                <div class="error-state">
+                    <h3>⚠️ Error al cargar</h3>
+                    <p>No se pudo cargar la configuración del hub.</p>
+                    <p style="font-size: 12px; color: #999;">Si eres el administrador, asegúrate de que config.js esté en el servidor.</p>
+                    <button class="retry-btn" onclick="location.reload()">🔄 Reintentar</button>
+                </div>
+            `;
+        }
+
+        // Aplicar tema
+        function applyTheme() {
+            if (typeof THEMES === 'undefined' || !config) return;
+
+            const theme = THEMES[config.settings.theme] || THEMES.professional;
+            document.documentElement.style.setProperty('--primary', theme.primary);
+            document.documentElement.style.setProperty('--secondary', theme.secondary);
+            document.documentElement.style.setProperty('--bg', theme.background);
+            document.documentElement.style.setProperty('--text', theme.text);
+        }
+
+        // Renderizar perfil
+        function renderProfile() {
+            if (!config) return;
+
+            const profile = config.profile;
+
+            // Avatar
+            const avatarEl = document.getElementById('avatar');
+            if (profile.avatar) {
+                avatarEl.innerHTML = `<img src="${profile.avatar}" alt="${profile.name}">`;
+            } else {
+                const initials = profile.name.split(' ')
+                    .map(word => word[0])
+                    .join('')
+                    .toUpperCase()
+                    .substring(0, 2);
+                avatarEl.textContent = initials;
+            }
+
+            // Información básica
+            document.getElementById('name').textContent = profile.name;
+            document.getElementById('description').textContent = profile.description;
+
+            // Bio (opcional)
+            if (profile.bio) {
+                const bioEl = document.getElementById('bio');
+                bioEl.textContent = profile.bio;
+                bioEl.style.display = 'block';
+            }
+
+            // Redes sociales
+            const socialLinksEl = document.getElementById('socialLinks');
+            socialLinksEl.innerHTML = '';
+
+            if (profile.social && profile.social.instagram) {
+                const username = profile.social.instagram.replace('@', '');
+                socialLinksEl.innerHTML += `<a href="https://instagram.com/${username}" class="social-link" target="_blank" rel="noopener">📷</a>`;
+            }
+            if (profile.social && profile.social.twitter) {
+                const username = profile.social.twitter.replace('@', '');
+                socialLinksEl.innerHTML += `<a href="https://twitter.com/${username}" class="social-link" target="_blank" rel="noopener">🐦</a>`;
+            }
+            if (profile.social && profile.social.telegram) {
+                const username = profile.social.telegram.replace('@', '');
+                socialLinksEl.innerHTML += `<a href="https://t.me/${username}" class="social-link" target="_blank" rel="noopener">✈️</a>`;
+            }
+        }
+
+        // Renderizar filtros
+        function renderFilters() {
+            if (!config || !config.settings.showCategories) return;
+
+            const filtersEl = document.getElementById('filters');
+            filtersEl.innerHTML = '<button class="filter-btn active" data-category="all" onclick="filterLinks('all')">🌟 Todos</button>';
+
+            // Obtener categorías únicas de los enlaces activos
+            const usedCategories = [...new Set(
+                config.links
+                    .filter(link => link.active)
+                    .map(link => link.category)
+            )];
+
+            if (usedCategories.length > 1) {
+                usedCategories.forEach(categoryId => {
+                    const category = config.categories[categoryId];
+                    if (category) {
+                        const btn = document.createElement('button');
+                        btn.className = 'filter-btn';
+                        btn.dataset.category = categoryId;
+                        btn.textContent = `${category.icon} ${category.name}`;
+                        btn.onclick = () => filterLinks(categoryId);
+                        filtersEl.appendChild(btn);
+                    }
+                });
+
+                filtersEl.style.display = 'flex';
+            }
+        }
+
+        // Filtrar enlaces
+        function filterLinks(category) {
+            currentFilter = category;
+
+            // Actualizar botones activos
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                }
+            });
+
+            renderLinks();
+        }
+
+        // Renderizar enlaces
+        function renderLinks() {
+            if (!config) return;
+
+            const container = document.getElementById('linksContainer');
+
+            // Filtrar enlaces activos
+            let links = config.links
+                .filter(link => link.active)
+                .filter(link => currentFilter === 'all' || link.category === currentFilter)
+                .sort((a, b) => a.order - b.order);
+
+            if (links.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No hay enlaces disponibles</h3>
+                        <p>Pronto habrá nuevas ofertas aquí</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = links.map(link => {
+                const category = config.categories[link.category];
+                const categoryColor = category ? category.color : '#6c757d';
+
+                return `
+                    <a href="${link.url}" class="link ${link.featured ? 'featured' : ''}" target="_blank" rel="noopener noreferrer">
+                        ${link.featured ? '<span class="featured-badge">⭐ Destacado</span>' : ''}
+                        <div class="link-content">
+                            <div class="link-emoji">${link.emoji}</div>
+                            <div class="link-info">
+                                <div class="link-title">${link.title}</div>
+                                <div class="link-description">${link.description}</div>
+                                ${category ? `<span class="link-category" style="background: ${categoryColor}">${category.icon} ${category.name}</span>` : ''}
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // Inicializar cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadConfig);
+        } else {
+            loadConfig();
+        }
+    </script>
+</body>
+</html>

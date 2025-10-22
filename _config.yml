@@ -1,0 +1,31 @@
+# GitHub Pages configuration
+title: Mi Hub de Enlaces de Referido
+description: Los mejores enlaces para ahorrar y ganar dinero
+baseurl: ""
+url: ""
+
+# Configuración de Jekyll
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - package.json
+  - node_modules/
+
+# SEO
+lang: es_ES
+author: Tu Nombre
+social:
+  name: Tu Nombre
+  links:
+    - https://instagram.com/tu_usuario
+    - https://twitter.com/tu_usuario

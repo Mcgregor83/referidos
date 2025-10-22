@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --bg: #f8f9fa;
+            --text: #333;
+            --border: #e9ecef;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Login */
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .login-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        input[type="password"],
+        input[type="text"],
+        input[type="url"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: border 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: #333;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .error-msg {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        .password-hint {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #1565C0;
+            text-align: left;
+        }
+
+        .forgot-password {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .forgot-password-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .forgot-password-text {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .recovery-steps {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            border-radius: 4px;
+            text-align: left;
+            font-size: 12px;
+            color: #856404;
+            margin-top: 15px;
+        }
+
+        .recovery-steps ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .recovery-steps li {
+            margin-bottom: 8px;
+        }
+
+        .recovery-steps strong {
+            color: #721c24;
+        }
+
+        /* Admin Panel */
+        .admin-container {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .admin-container.show {
+            display: block;
+        }
+
+        .admin-header {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .admin-title {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .link-item {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .link-emoji {
+            font-size: 32px;
+            width: 50px;
+            text-align: center;
+        }
+
+        .link-info {
+            flex: 1;
+        }
+
+        .link-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .link-url {
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .link-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .theme-card {
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .theme-card:hover,
+        .theme-card.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .code-preview {
+            background: #f5f5f5;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            max-height: 400px;
+            margin-top: 20px;
+        }
+
+        .download-section {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .download-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2e7d32;
+        }
+
+        .download-steps {
+            font-size: 14px;
+            color: #1b5e20;
+            margin-bottom: 15px;
+        }
+
+        .download-steps ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .download-steps li {
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-header {
+                text-align: center;
+            }
+
+            .admin-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .link-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .link-actions {
+                justify-content: center;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <div class="login-icon">🔒</div>
+            <h1 class="login-title">Panel de Administración</h1>
+            <p class="login-subtitle">Ingresa tu contraseña para continuar</p>
+
+            <form onsubmit="login(event)">
+                <input type="password" id="passwordInput" placeholder="Contraseña" required autocomplete="current-password">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">🔓 Acceder</button>
+                <div class="error-msg" id="errorMsg">❌ Contraseña incorrecta</div>
+            </form>
+
+            <div class="password-hint">
+                <strong>ℹ️ Primera vez:</strong><br>
+                La contraseña por defecto es: <strong>admin123</strong><br>
+                Cámbiala desde el panel de configuración.
+            </div>
+
+            <!-- Sección de recuperación de contraseña -->
+            <div class="forgot-password">
+                <div class="forgot-password-title">🔑 ¿Olvidaste tu contraseña?</div>
+                <div class="forgot-password-text">
+                    No hay problema. Puedes recuperar el acceso restaurando la contraseña por defecto.
+                </div>
+                <button class="btn btn-info" style="width: 100%;" onclick="showRecoveryInstructions()">
+                    📖 Ver Instrucciones de Recuperación
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-container" id="adminContainer">
+        <!-- Header -->
+        <div class="admin-header">
+            <h1 class="admin-title">⚙️ Panel de Administración</h1>
+            <div class="admin-actions">
+                <a href="index.html" class="btn btn-primary" target="_blank">🏠 Ver Hub</a>
+                <button class="btn btn-secondary" onclick="changeTab('preview')">👁️ Vista Previa</button>
+                <button class="btn btn-success" onclick="generateConfigFile()">💾 Generar Archivo</button>
+                <button class="btn btn-danger" onclick="logout()">🚪 Salir</button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="changeTab('profile')">👤 Perfil</div>
+            <div class="tab" onclick="changeTab('links')">🔗 Enlaces</div>
+            <div class="tab" onclick="changeTab('settings')">🎨 Configuración</div>
+            <div class="tab" onclick="changeTab('password')">🔑 Contraseña</div>
+            <div class="tab" onclick="changeTab('preview')">👁️ Vista Previa</div>
+            <div class="tab" onclick="changeTab('export')">📤 Exportar</div>
+        </div>
+
+        <!-- Tab: Perfil -->
+        <div class="tab-content active" id="profileTab">
+            <div class="section">
+                <h2 class="section-title">👤 Información del Perfil</h2>
+                <div class="form-group">
+                    <label>Nombre del Hub</label>
+                    <input type="text" id="profileName" placeholder="Mi Hub de Enlaces">
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="profileDescription" placeholder="Descripción breve..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Bio (opcional)</label>
+                    <textarea id="profileBio" placeholder="Información adicional..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>URL de Avatar (opcional)</label>
+                    <input type="url" id="profileAvatar" placeholder="https://...">
+                    <small style="color: #666;">Si no subes imagen, se usarán las iniciales de tu nombre</small>
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 15px;">Redes Sociales (opcional)</h3>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Instagram</label>
+                        <input type="text" id="socialInstagram" placeholder="@usuario">
+                    </div>
+                    <div class="form-group">
+                        <label>Twitter</label>
+                        <input type="text" id="socialTwitter" placeholder="@usuario">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Telegram</label>
+                    <input type="text" id="socialTelegram" placeholder="@usuario">
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Enlaces -->
+        <div class="tab-content" id="linksTab">
+            <div class="section">
+                <h2 class="section-title">🔗 Gestión de Enlaces</h2>
+                <button class="btn btn-primary" onclick="openLinkModal()">➕ Añadir Nuevo Enlace</button>
+
+                <div class="links-list" id="linksList"></div>
+            </div>
+        </div>
+
+        <!-- Tab: Configuración -->
+        <div class="tab-content" id="settingsTab">
+            <div class="section">
+                <h2 class="section-title">🎨 Temas Visuales</h2>
+                <div class="theme-grid" id="themeGrid"></div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">⚙️ Opciones</h2>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="showCategories" checked> Mostrar filtros de categorías
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="enableAnimation" checked> Activar animaciones
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Contraseña -->
+        <div class="tab-content" id="passwordTab">
+            <div class="section">
+                <h2 class="section-title">🔑 Cambiar Contraseña</h2>
+                <form onsubmit="updatePassword(event)">
+                    <div class="form-group">
+                        <label>Contraseña Actual</label>
+                        <input type="password" id="currentPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nueva Contraseña</label>
+                        <input type="password" id="newPassword" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmar Nueva Contraseña</label>
+                        <input type="password" id="confirmPassword" required minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Actualizar Contraseña</button>
+                    <div class="error-msg" id="passwordError"></div>
+                </form>
+
+                <div class="password-hint" style="margin-top: 30px;">
+                    <strong>⚠️ IMPORTANTE:</strong><br>
+                    Después de cambiar la contraseña, debes descargar el nuevo <strong>config.js</strong> y subirlo a GitHub.
+                    Sin este paso, la contraseña no se guardará permanentemente.
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Vista Previa -->
+        <div class="tab-content" id="previewTab">
+            <div class="section">
+                <h2 class="section-title">👁️ Vista Previa</h2>
+                <p style="margin-bottom: 20px;">Vista previa de cómo se verá tu hub públicamente:</p>
+                <iframe id="previewFrame" src="index.html" style="width: 100%; height: 600px; border: 2px solid var(--border); border-radius: 12px;"></iframe>
+                <button class="btn btn-primary" style="margin-top: 15px;" onclick="refreshPreview()">🔄 Actualizar Vista Previa</button>
+            </div>
+        </div>
+
+        <!-- Tab: Exportar -->
+        <div class="tab-content" id="exportTab">
+            <div class="section">
+                <h2 class="section-title">📤 Exportar Configuración</h2>
+
+                <div class="download-section">
+                    <div class="download-title">🎯 Pasos para Aplicar Cambios</div>
+                    <div class="download-steps">
+                        <ol>
+                            <li>Haz clic en "💾 Generar y Descargar config.js"</li>
+                            <li>Se descargará el archivo <strong>config.js</strong></li>
+                            <li>Ve a tu repositorio de GitHub</li>
+                            <li>Haz clic en el archivo <strong>config.js</strong></li>
+                            <li>Haz clic en el botón de lápiz (✏️ Edit)</li>
+                            <li>Borra todo el contenido anterior</li>
+                            <li>Abre el config.js descargado y copia todo su contenido</li>
+                            <li>Pégalo en GitHub y haz clic en "Commit changes"</li>
+                            <li>Espera 2-3 minutos y tu hub estará actualizado 🎉</li>
+                        </ol>
+                    </div>
+                    <button class="btn btn-success" onclick="downloadConfigFile()" style="width: 100%;">
+                        💾 Generar y Descargar config.js
+                    </button>
+                </div>
+
+                <h3 style="margin: 30px 0 15px 0;">Vista Previa del Código</h3>
+                <p style="color: #666; margin-bottom: 15px;">Este es el código que se generará:</p>
+                <div class="code-preview" id="codePreview"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para añadir/editar enlaces -->
+    <div class="modal" id="linkModal">
+        <div class="modal-content">
+            <h2 class="modal-title" id="modalTitle">Añadir Enlace</h2>
+            <form onsubmit="saveLinkForm(event)">
+                <div class="form-group">
+                    <label>Emoji</label>
+                    <input type="text" id="linkEmoji" placeholder="💰" maxlength="2" required>
+                </div>
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="linkTitle" placeholder="Nombre del enlace" required>
+                </div>
+                <div class="form-group">
+                    <label>URL</label>
+                    <input type="url" id="linkUrl" placeholder="https://..." required>
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="linkDescription" placeholder="Descripción atractiva..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="linkCategory" required>
+                        <option value="finanzas">💰 Finanzas</option>
+                        <option value="viajes">✈️ Viajes</option>
+                        <option value="tecnologia">💻 Tecnología</option>
+                        <option value="shopping">🛒 Shopping</option>
+                        <option value="entretenimiento">🎵 Entretenimiento</option>
+                        <option value="salud">🏥 Salud</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="linkActive" checked> Enlace activo
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="linkFeatured"> Marcar como destacado ⭐
+                    </label>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de recuperación de contraseña -->
+    <div class="modal" id="recoveryModal">
+        <div class="modal-content">
+            <h2 class="modal-title">🔑 Recuperar Contraseña</h2>
+            <p style="margin-bottom: 20px;">Si olvidaste tu contraseña, sigue estos pasos para restaurar la contraseña por defecto:</p>
+
+            <div class="recovery-steps">
+                <strong>📋 Instrucciones:</strong>
+                <ol>
+                    <li>Ve a tu repositorio de GitHub: <strong>https://github.com/mcgregor83/referidos</strong></li>
+                    <li>Haz clic en el archivo <strong>config.js</strong></li>
+                    <li>Haz clic en el botón de lápiz <strong>✏️ Edit</strong></li>
+                    <li>Busca la línea que dice: <code>passwordHash: "XXXXX"</code></li>
+                    <li>Reemplázala por: <code>passwordHash: "336551"</code></li>
+                    <li>Scroll hasta abajo y haz clic en <strong>"Commit changes"</strong></li>
+                    <li>Espera 2-3 minutos</li>
+                    <li>Recarga esta página</li>
+                    <li>Usa la contraseña: <strong>admin123</strong></li>
+                </ol>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 4px solid var(--warning); padding: 15px; margin-top: 20px; border-radius: 4px;">
+                <strong>💡 Alternativa Rápida:</strong><br>
+                Descarga el archivo <strong>config.js</strong> original del ZIP que te proporcioné y súbelo a GitHub.
+                La contraseña volverá automáticamente a <strong>admin123</strong>.
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="closeModal()">Entendido</button>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+
+    <script>
+    // Variables globales
+    let currentConfig = JSON.parse(JSON.stringify(HUB_CONFIG));
+    let editingLinkId = null;
+
+    // Hash simple para contraseña
+    function hashPassword(password) {
+        let hash = 0;
+        for (let i = 0; i < password.length; i++) {
+            const char = password.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return Math.abs(hash).toString();
+    }
+
+    // Mostrar instrucciones de recuperación
+    function showRecoveryInstructions() {
+        document.getElementById('recoveryModal').classList.add('show');
+    }
+
+    // Login
+    function login(event) {
+        event.preventDefault();
+        const password = document.getElementById('passwordInput').value;
+        const inputHash = hashPassword(password);
+
+        if (inputHash === currentConfig.admin.passwordHash) {
+            sessionStorage.setItem('adminSession', 'active');
+            showAdmin();
+        } else {
+            document.getElementById('errorMsg').classList.add('show');
+            document.getElementById('passwordInput').value = '';
+        }
+    }
+
+    // Logout
+    function logout() {
+        if (confirm('¿Cerrar sesión?')) {
+            sessionStorage.removeItem('adminSession');
+            hideAdmin();
+        }
+    }
+
+    // Mostrar/Ocultar admin
+    function showAdmin() {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminContainer').classList.add('show');
+        loadData();
+    }
+
+    function hideAdmin() {
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('adminContainer').classList.remove('show');
+    }
+
+    // Cambiar contraseña
+    function updatePassword(event) {
+        event.preventDefault();
+        const current = document.getElementById('currentPassword').value;
+        const newPass = document.getElementById('newPassword').value;
+        const confirm = document.getElementById('confirmPassword').value;
+        const errorEl = document.getElementById('passwordError');
+
+        if (hashPassword(current) !== currentConfig.admin.passwordHash) {
+            errorEl.textContent = '❌ Contraseña actual incorrecta';
+            errorEl.classList.add('show');
+            return;
+        }
+
+        if (newPass !== confirm) {
+            errorEl.textContent = '❌ Las contraseñas no coinciden';
+            errorEl.classList.add('show');
+            return;
+        }
+
+        if (newPass.length < 6) {
+            errorEl.textContent = '❌ La contraseña debe tener al menos 6 caracteres';
+            errorEl.classList.add('show');
+            return;
+        }
+
+        currentConfig.admin.passwordHash = hashPassword(newPass);
+        showNotification('Contraseña actualizada. ⚠️ IMPORTANTE: Descarga y sube el nuevo config.js', 'success');
+        event.target.reset();
+        errorEl.classList.remove('show');
+    }
+
+    // Cargar datos
+    function loadData() {
+        document.getElementById('profileName').value = currentConfig.profile.name;
+        document.getElementById('profileDescription').value = currentConfig.profile.description;
+        document.getElementById('profileBio').value = currentConfig.profile.bio;
+        document.getElementById('profileAvatar').value = currentConfig.profile.avatar;
+        document.getElementById('socialInstagram').value = currentConfig.profile.social.instagram;
+        document.getElementById('socialTwitter').value = currentConfig.profile.social.twitter;
+        document.getElementById('socialTelegram').value = currentConfig.profile.social.telegram;
+
+        document.getElementById('showCategories').checked = currentConfig.settings.showCategories;
+        document.getElementById('enableAnimation').checked = currentConfig.settings.animation;
+
+        renderThemes();
+        renderLinks();
+        setupAutoSave();
+    }
+
+    // Auto-guardar cambios
+    function setupAutoSave() {
+        const inputs = [
+            'profileName', 'profileDescription', 'profileBio', 'profileAvatar',
+            'socialInstagram', 'socialTwitter', 'socialTelegram'
+        ];
+
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', () => {
+                    if (id.startsWith('profile')) {
+                        const key = id.replace('profile', '').toLowerCase();
+                        currentConfig.profile[key] = el.value;
+                    } else if (id.startsWith('social')) {
+                        const key = id.replace('social', '').toLowerCase();
+                        currentConfig.profile.social[key] = el.value;
+                    }
+                });
+            }
+        });
+
+        document.getElementById('showCategories').addEventListener('change', (e) => {
+            currentConfig.settings.showCategories = e.target.checked;
+        });
+        document.getElementById('enableAnimation').addEventListener('change', (e) => {
+            currentConfig.settings.animation = e.target.checked;
+        });
+    }
+
+    // Renderizar temas
+    function renderThemes() {
+        const themeGrid = document.getElementById('themeGrid');
+        themeGrid.innerHTML = '';
+
+        Object.keys(THEMES).forEach(themeId => {
+            const theme = THEMES[themeId];
+            const isActive = currentConfig.settings.theme === themeId;
+
+            themeGrid.innerHTML += `
+                <div class="theme-card ${isActive ? 'active' : ''}" onclick="selectTheme('${themeId}')">
+                    <div style="width: 40px; height: 40px; background: ${theme.primary}; border-radius: 8px; margin: 0 auto 10px;"></div>
+                    <strong>${theme.name}</strong>
+                </div>
+            `;
+        });
+    }
+
+    // Seleccionar tema
+    function selectTheme(themeId) {
+        currentConfig.settings.theme = themeId;
+        renderThemes();
+        showNotification('Tema seleccionado: ' + THEMES[themeId].name, 'success');
+    }
+
+    // Renderizar enlaces
+    function renderLinks() {
+        const container = document.getElementById('linksList');
+
+        if (currentConfig.links.length === 0) {
+            container.innerHTML = '<p style="text-align: center; padding: 40px; color: #666;">No hay enlaces. Añade tu primer enlace de referido.</p>';
+            return;
+        }
+
+        const sortedLinks = [...currentConfig.links].sort((a, b) => a.order - b.order);
+
+        container.innerHTML = sortedLinks.map(link => `
+            <div class="link-item">
+                <div class="link-emoji">${link.emoji}</div>
+                <div class="link-info">
+                    <div class="link-title">
+                        ${link.title}
+                        ${link.featured ? ' ⭐' : ''}
+                        ${!link.active ? ' <span style="color: var(--warning);">(INACTIVO)</span>' : ''}
+                    </div>
+                    <div class="link-url">${link.url}</div>
+                </div>
+                <div class="link-actions">
+                    <button class="btn btn-secondary btn-small" onclick="editLink(${link.id})">✏️</button>
+                    <button class="btn btn-small ${link.active ? 'btn-warning' : 'btn-success'}" onclick="toggleLink(${link.id})">
+                        ${link.active ? '⏸️' : '▶️'}
+                    </button>
+                    <button class="btn btn-danger btn-small" onclick="deleteLink(${link.id})">🗑️</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Abrir modal de enlace
+    function openLinkModal() {
+        editingLinkId = null;
+        document.getElementById('modalTitle').textContent = 'Añadir Nuevo Enlace';
+        document.getElementById('linkEmoji').value = '';
+        document.getElementById('linkTitle').value = '';
+        document.getElementById('linkUrl').value = '';
+        document.getElementById('linkDescription').value = '';
+        document.getElementById('linkCategory').value = 'finanzas';
+        document.getElementById('linkActive').checked = true;
+        document.getElementById('linkFeatured').checked = false;
+        document.getElementById('linkModal').classList.add('show');
+    }
+
+    // Editar enlace
+    function editLink(id) {
+        const link = currentConfig.links.find(l => l.id === id);
+        if (!link) return;
+
+        editingLinkId = id;
+        document.getElementById('modalTitle').textContent = 'Editar Enlace';
+        document.getElementById('linkEmoji').value = link.emoji;
+        document.getElementById('linkTitle').value = link.title;
+        document.getElementById('linkUrl').value = link.url;
+        document.getElementById('linkDescription').value = link.description;
+        document.getElementById('linkCategory').value = link.category;
+        document.getElementById('linkActive').checked = link.active;
+        document.getElementById('linkFeatured').checked = link.featured;
+        document.getElementById('linkModal').classList.add('show');
+    }
+
+    // Guardar enlace
+    function saveLinkForm(event) {
+        event.preventDefault();
+
+        const linkData = {
+            emoji: document.getElementById('linkEmoji').value,
+            title: document.getElementById('linkTitle').value,
+            url: document.getElementById('linkUrl').value,
+            description: document.getElementById('linkDescription').value,
+            category: document.getElementById('linkCategory').value,
+            active: document.getElementById('linkActive').checked,
+            featured: document.getElementById('linkFeatured').checked
+        };
+
+        if (editingLinkId) {
+            const index = currentConfig.links.findIndex(l => l.id === editingLinkId);
+            currentConfig.links[index] = {
+                ...currentConfig.links[index],
+                ...linkData
+            };
+        } else {
+            const newId = currentConfig.links.length > 0 
+                ? Math.max(...currentConfig.links.map(l => l.id)) + 1 
+                : 1;
+            currentConfig.links.push({
+                id: newId,
+                ...linkData,
+                order: newId
+            });
+        }
+
+        closeModal();
+        renderLinks();
+        showNotification(editingLinkId ? 'Enlace actualizado' : 'Enlace añadido', 'success');
+    }
+
+    // Toggle enlace
+    function toggleLink(id) {
+        const link = currentConfig.links.find(l => l.id === id);
+        if (link) {
+            link.active = !link.active;
+            renderLinks();
+            showNotification(`Enlace ${link.active ? 'activado' : 'desactivado'}`, 'success');
+        }
+    }
+
+    // Eliminar enlace
+    function deleteLink(id) {
+        if (confirm('¿Eliminar este enlace?')) {
+            currentConfig.links = currentConfig.links.filter(l => l.id !== id);
+            renderLinks();
+            showNotification('Enlace eliminado', 'success');
+        }
+    }
+
+    // Cerrar modal
+    function closeModal() {
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.classList.remove('show');
+        });
+    }
+
+    // Cambiar tab
+    function changeTab(tabName) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelector(`[onclick="changeTab('${tabName}')"]`).classList.add('active');
+
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(tabName + 'Tab').classList.add('active');
+
+        if (tabName === 'preview') {
+            refreshPreview();
+        }
+
+        if (tabName === 'export') {
+            updateCodePreview();
+        }
+    }
+
+    // Actualizar vista previa
+    function refreshPreview() {
+        generateConfigFile(true);
+        const iframe = document.getElementById('previewFrame');
+        iframe.src = iframe.src;
+        showNotification('Vista previa actualizada', 'success');
+    }
+
+    // Generar código
+    function generateConfigCode() {
+        return `// config.js - Configuración y datos del hub
+const HUB_CONFIG = ${JSON.stringify(currentConfig, null, 4)};
+
+const THEMES = ${JSON.stringify(THEMES, null, 4)};
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { HUB_CONFIG, THEMES };
+}`;
+    }
+
+    // Actualizar vista previa del código
+    function updateCodePreview() {
+        const code = generateConfigCode();
+        document.getElementById('codePreview').textContent = code;
+    }
+
+    // Generar y descargar
+    function generateConfigFile(tempOnly = false) {
+        const code = generateConfigCode();
+
+        if (!tempOnly) {
+            const blob = new Blob([code], { type: 'text/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'config.js';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showNotification('✅ Archivo config.js descargado. Ahora súbelo a GitHub!', 'success');
+        }
+    }
+
+    // Descargar archivo
+    function downloadConfigFile() {
+        generateConfigFile(false);
+    }
+
+    // Notificación
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type} show`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => document.body.removeChild(notification), 300);
+        }, 4000);
+    }
+
+    // Cerrar modal al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            closeModal();
+        }
+    });
+
+    // Inicializar
+    document.addEventListener('DOMContentLoaded', () => {
+        if (sessionStorage.getItem('adminSession') === 'active') {
+            showAdmin();
+        }
+    });
+    </script>
+</body>
+</html>

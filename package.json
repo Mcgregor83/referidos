@@ -1,0 +1,26 @@
+{
+  "name": "referral-hub",
+  "version": "1.0.0",
+  "description": "Hub profesional de enlaces de referido",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "echo 'Deploy to your preferred hosting'"
+  },
+  "keywords": [
+    "referral",
+    "links",
+    "linktree",
+    "affiliate",
+    "marketing",
+    "pwa"
+  ],
+  "author": "Tu Nombre",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/referral-hub.git"
+  },
+  "homepage": "https://tu-usuario.github.io/referral-hub/"
+}
